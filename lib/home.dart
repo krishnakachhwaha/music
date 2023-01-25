@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:music/TabBar_recom.dart';
 
 void main() {
   runApp(MyApp());
@@ -26,31 +27,27 @@ class home extends StatefulWidget {
   State<home> createState() => _homeState();
 }
 
-class _homeState extends State<home> {
+class _homeState extends State<home> with TickerProviderStateMixin {
   int currentIndex = 0;
-  var arrNames = [
-    "1st Song",
-    "2st Song",
-    "3st Song",
-    "4st Song",
-  ];
-
   @override
   Widget build(BuildContext context) {
     var mq = MediaQuery.of(context);
+    final mqh = MediaQuery.of(context).size.height;
+    final mqw = MediaQuery.of(context).size.width;
+    TabController _tabController = TabController(length: 4, vsync: this);
+
+    var arrNames = [
+      "Selfie mene leli aaj",
+      "Dilo ka shooter h mera scooter",
+      "pgl hoke nacho",
+      "Subhe uthte h hum",
+    ];
     return SafeArea(
       child: Scaffold(
         body: Container(
           width: double.infinity,
           height: double.infinity,
-          decoration: BoxDecoration(
-              gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [
-                Colors.deepPurple.shade500,
-                Colors.deepPurple.shade900
-              ])),
+          color: Color.fromARGB(255, 52, 59, 102),
           child: Padding(
             padding: const EdgeInsets.only(left: 15),
             child: Column(
@@ -73,84 +70,28 @@ class _homeState extends State<home> {
                       fontWeight: FontWeight.bold),
                 ),
                 SizedBox(
-                  height: mq.size.height * 0.02,
+                  height: mq.size.height * 0.03,
                 ),
                 Padding(
-                  padding: const EdgeInsetsDirectional.only(start: 0, end: 20),
-                  child: TextField(
-                    decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10)),
-                        prefixIcon: Icon(
-                          FontAwesomeIcons.search,
-                          size: mq.size.height * 0.02,
-                          color: Colors.white54,
-                        ),
-                        label: Text('Search Gaana',
-                            style: TextStyle(color: Colors.white54)),
-                        suffixIcon: Icon(FontAwesomeIcons.eye,
-                            size: mq.size.height * 0.03,
-                            color: Colors.white54)),
-                  ),
-                ),
-                SizedBox(height: mq.size.height * 0.02),
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    children: [
-                      Text('Recommendation',
-                          style: TextStyle(color: Colors.white, fontSize: 18)),
-                      SizedBox(width: mq.size.width * 0.06),
-                      Text('Trending',
-                          style:
-                              TextStyle(color: Colors.white54, fontSize: 18)),
-                      SizedBox(width: mq.size.width * 0.06),
-                      Text('Business',
-                          style:
-                              TextStyle(color: Colors.white54, fontSize: 18)),
-                      SizedBox(width: mq.size.width * 0.06),
-                      Text('Crypt',
-                          style:
-                              TextStyle(color: Colors.white54, fontSize: 18)),
+                  padding: const EdgeInsetsDirectional.only(end: 15),
+                  child: TabBar(
+                    controller: _tabController,
+                    isScrollable: true,
+                    indicatorColor: Colors.blue,
+                    indicator: UnderlineTabIndicator(
+                        insets: EdgeInsets.symmetric(horizontal: 50)),
+                    labelColor: Colors.white,
+                    tabs: [
+                      Tab(child: Text('Recommendation')),
+                      Tab(child: Text('Trending')),
+                      Tab(child: Text('Business')),
+                      Tab(child: Text('Crypto')),
                     ],
                   ),
                 ),
-                SizedBox(height: mq.size.height * 0.01),
-                Text('IMAGE',
-                    style: TextStyle(fontSize: 120, color: Colors.white)),
-                Row(
-                  children: [
-                    Text(
-                      'Recently Play',
-                      style: TextStyle(fontSize: 23, color: Colors.white),
-                    ),
-                    SizedBox(width: mq.size.width * 0.4),
-                    Text(
-                      'See All',
-                      style: TextStyle(fontSize: 18, color: Colors.white54),
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: mq.size.height * 0.08,
-                ),
-                Expanded(
-                  child: ListView.builder(
-                    itemCount: arrNames.length,
-                    itemBuilder: (context, index) => Column(
-                      children: [
-                        Container(
-                          height: 30,
-                          width: 30,
-                          child: Text(
-                            "${arrNames[index]}",
-                            style: TextStyle(fontSize: 20, color: Colors.white),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                )
+                TabBarView(children: [
+                  recomm(),
+                ])
               ],
             ),
           ),
@@ -160,27 +101,23 @@ class _homeState extends State<home> {
           currentIndex: currentIndex,
           onTap: (index) => setState(() => currentIndex = index),
           unselectedItemColor: Colors.white,
-          selectedItemColor: Colors.yellowAccent,
+          selectedItemColor: Colors.purpleAccent,
           items: [
             BottomNavigationBarItem(
-              icon: Icon(FontAwesomeIcons.home),
-              label: 'home',
-              backgroundColor: Colors.deepPurple.shade800,
-            ),
+                icon: Icon(FontAwesomeIcons.home),
+                label: 'home',
+                backgroundColor: Colors.deepPurple),
             BottomNavigationBarItem(
               icon: Icon(FontAwesomeIcons.bookOpen),
               label: 'library',
-              backgroundColor: Colors.deepPurple.shade800,
             ),
             BottomNavigationBarItem(
               icon: Icon(FontAwesomeIcons.rupeeSign),
               label: 'premium',
-              backgroundColor: Colors.deepPurple.shade800,
             ),
             BottomNavigationBarItem(
-              icon: Icon(FontAwesomeIcons.earth),
-              label: 'profile',
-              backgroundColor: Colors.deepPurple.shade800,
+              icon: Icon(FontAwesomeIcons.radio),
+              label: 'studio',
             ),
           ],
         ),
